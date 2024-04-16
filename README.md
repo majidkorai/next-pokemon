@@ -38,3 +38,10 @@ This view displays some details about a selected Pokemon from the Pokemon List. 
 Screenshot for Pokemon Details
 <img width="1786" alt="Screenshot 2024-04-16 at 6 12 41 PM" src="https://github.com/majidkorai/next-pokemon/assets/1949155/f07d5317-8513-4bdb-a3be-a5b7aa9a5d67">
 
+## Tech Stack and Directory Structure
+Project is built using `Next.js` v14 with Typescript. Though it doesn't use SSR capabilities of Next.js. For state management it uses `React Query`. Navigation is done using `App Router` of Next.js. Project displays Pokemon Stats in a bar chart which uses `React Charts` library. Also I have used `lodash` utilities in some views.
+
+Directory structure is nothing fancy, just typical Next.js directory structure. Next.js Pages are directly in `app` folder, alongwith two other directories. `lib` directory contains helpers / utils files e.g. types and data fetching utils. `ui` directory contains all the react components used in the project. 
+
+##Problems / Flaws
+There are some issues with the project. First one is that I couldn't get spare much time to add tests. 2nd is the performance issue. On the Pokemon Types view for example, we are loading Pokemon data from `pokeapi` to fill the dropdown, the api that lists the pokemon doesn't give enough information. It only retrieves the name of the pokemon and url to fetch details. So we are fetching the details also by making api calls for each pokemon to fetch the details. This makes several calls together to fetch the data and UI shows loading. I think the optimal way to solve this issue was to use graphQl. By using graphQl we could fetch all the required data in one single call. 

@@ -6,35 +6,41 @@ import { useRouter } from "next/navigation";
 import startCase from "lodash/startCase";
 import React, { useMemo } from "react";
 import { SlArrowLeft } from "react-icons/sl";
-import { Pokemon, PokemonStatData, PokemonStats } from "../lib/types";
-import { AxisOptions, Chart } from "react-charts";
+import { Pokemon } from "../lib/types";
+import Chart from "react-apexcharts";
 
 const PokemonDetails = ({ pokemon }: { pokemon: Pokemon }) => {
   const router = useRouter();
-  const data: PokemonStatData = {
-    label: pokemon.name,
-    data: pokemon?.stats?.map((stat) => ({
-      stat: stat.base_stat,
-      name: stat.stat.name,
-    })),
-  };
 
-  const primaryAxis = useMemo(
-    (): AxisOptions<PokemonStats> => ({
-      getValue: (datum) => datum.name,
-    }),
-    []
-  );
-
-  const secondaryAxes = useMemo(
-    (): AxisOptions<PokemonStats>[] => [
+  const chartData = {
+    options: {
+      chart: {
+        id: "pokemon-stats",
+      },
+      xaxis: {
+        categories: pokemon?.stats?.map((stat) => stat.stat.name),
+        labels: {
+          style: {
+            colors: pokemon?.stats?.map((stat) => "#ffffff"),
+          },
+        },
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: pokemon?.stats?.map((stat) => "#ffffff"),
+          },
+        },
+      },
+    },
+    series: [
       {
-        getValue: (datum) => datum.stat,
-        elementType: "bar",
+        name: pokemon.name,
+        data: pokemon?.stats?.map((stat) => stat.base_stat),
       },
     ],
-    []
-  );
+  };
+
   return (
     <div className="flex flex-nowrap flex-col">
       <div className="grid grid-cols-3 w-full gap-2 justify-items-center">
@@ -53,13 +59,12 @@ const PokemonDetails = ({ pokemon }: { pokemon: Pokemon }) => {
           alt={pokemon?.name}
         />
       </div>
-      <div className="h-80 w-80 self-center">
+      <div className="h-80 w-80 self-center text-black">
         <Chart
-          options={{
-            data: [data],
-            primaryAxis,
-            secondaryAxes,
-          }}
+          options={chartData.options}
+          series={chartData.series}
+          type="bar"
+          width="500"
         />
       </div>
       <div className="flex flex-wrap align-center justify-center">
